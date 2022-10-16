@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <h1>game</h1>
+  <p>choose your pokemons</p>
+
+  <form action="" method="post" class="form-team">
+    <label for="p1">Pokemon 1</label>
+    <input list="pokemons" id="p1" name="p1" class="team__input">
+
+    <label for="p2">Pokemon 2</label>
+    <input list="pokemons" id="p2" name="p2" class="team__input">
+
+    <label for="p3">Pokemon 3</label>
+    <input list="pokemons" id="p3" name="p3" class="team__input">
+
+    <label for="p4">Pokemon 4</label>
+    <input list="pokemons" id="p4" name="p4" class="team__input">
+
+    <label for="p5">Pokemon 5</label>
+    <input list="pokemons" id="p5" name="p5" class="team__input">
+ 
+    <label for="p6">Pokemon 6</label>
+    <input list="pokemons" id="p6" name="p6" class="team__input">
+
+
+    <datalist id="pokemons"></datalist>
+    <template id="pokemonsOpt">
+      <option value=""></option>
+    </template>
+
+    <input type="submit" value="Valider">
+  </form>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/public/js/main.js"></script>
+</body>
+</html>
