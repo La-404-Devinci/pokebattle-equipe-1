@@ -1,9 +1,7 @@
 module.exports = {
-  Pokemon : class Pokemon {
-    constructor(){
+  Pokemon: class Pokemon {
+    constructor () {
 
     }
-
-    
   }
 }
