@@ -2,11 +2,11 @@ module.exports =
 class Player {
   name;
   team;
-  socketId;
-  constructor(PlayerName, team, socketId){
+  playerUUID;
+  constructor(PlayerName, team, playerUUID){
     this.name = PlayerName;
     this.team = team;
-    this.socketId = socketId;
+    this.playerUUID = playerUUID;
   }
 
   setTeam(team) // Array of pkms representing the player team

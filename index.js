@@ -69,6 +69,13 @@ io.on('connection', (socket) => {
         break
     }
   })
+
+  // socket.on('START_SESSION', (message) => {
+
+  // })
+  socket.on('ROUND_INSTRUCTION', (message) => {
+
+  })
 })
 
 // app.listen(PORT,() => {
