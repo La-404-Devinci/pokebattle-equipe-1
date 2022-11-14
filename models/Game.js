@@ -1,4 +1,4 @@
-const Player = require("./Player").Player
+const Player = require('./Player').Player
 
 module.exports = 
 class Game {
