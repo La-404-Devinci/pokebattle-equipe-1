@@ -5,6 +5,10 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const Player = require('./models/Player');
 const Game = require('./models/Game');
+const Pokemon = require('./models/Pokemon');
+
+const p1 = require('./placeholders').p1;
+const p2 = require('./placeholders').p2;
 
 const io = new Server(server)
 const PORT = process.env.PORT || 3000
@@ -48,6 +52,22 @@ app.get('/', (req, res) => {
     const newPlayer = new Player(req.body.pseudo)
     game.addPlayer(newPlayer)
     res.sendFile(__dirname + '/public/pages/gameTest.html')
+
+    if(game.players.length === 2) {
+      // Start of the game
+      p1 = new Player(
+        "p1name",
+        [
+          new Pokemon(
+            "Garchomp",
+            [
+
+            ]
+          )
+        ],
+        "un socketid"
+      )
+    }
   })
 
 io.on('connection', (socket) => {
