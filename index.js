@@ -3,8 +3,8 @@ const http = require('http');
 const app = express();
 const server = http.createServer(app);
 const { Server } = require("socket.io");
-const Player = require('./models/Player').Player;
-const Game = require('./models/Game').Game;
+const Player = require('./models/Player');
+const Game = require('./models/Game');
 
 
 const io = new Server(server);

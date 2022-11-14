@@ -1,9 +1,6 @@
-module.exports = {
-  Pokemon : class Pokemon {
-    constructor(){
+module.exports =
+class Pokemon {
+  constructor(){
 
-    }
-
-    
-  }
+  } 
 }
