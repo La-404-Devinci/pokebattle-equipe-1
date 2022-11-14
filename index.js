@@ -55,18 +55,7 @@ app.get('/', (req, res) => {
 
     if(game.players.length === 2) {
       // Start of the game
-      p1 = new Player(
-        "p1name",
-        [
-          new Pokemon(
-            "Garchomp",
-            [
-
-            ]
-          )
-        ],
-        "un socketid"
-      )
+      
     }
   })
 
