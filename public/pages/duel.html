@@ -8,6 +8,15 @@
   <link rel="stylesheet" href="/public/css/duel.css">
 </head>
 <body>
+  <div class="switchBox">
+    <template id="switch__pokemon">
+      <div class="switch__pokemon"></div>
+    </template>
+
+    <div class="switchBox__team"></div>
+    <button class="switchBox__btn">Switch</button>
+    <button class="switchBox__close">cancel</button>
+  </div>
   <header>
     Waiting for other player
   </header>
@@ -20,6 +29,10 @@
     <div class="player">
       <h2>Player</h2>
       <span class="pokemon__name"></span>
+      <div class="pokemon__moves"></div>
+      <button class="switch">
+        Switch
+      </button>
     </div>
 
 

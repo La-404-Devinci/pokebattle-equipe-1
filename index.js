@@ -78,7 +78,6 @@ app.get('/', (req, res) => {
   let player = p1
   if(game.players.length === 1) player = p2
   
-  console.log(player)
   player.gameUUID = game.uuid;
   game.addPlayer(player)
   res.json({
@@ -120,7 +119,12 @@ io.on('connection', (socket) => {
   
   socket.on('ROUND_INSTRUCTION', (message) => {
     if(!game.getPlayerByUUID(message.playerUUID)) return
-    console.log(game.hasStarted)
+    if(game.getPlayerByUUID(message.playerUUID).action) return
+    game.getPlayerByUUID(message.playerUUID).action = message
+    console.log("player action")
+    if(!(game.players[0].action && game.players[0].action)) return
+    console.log("proceed turn")
+    game.proceedTurn()
   })
 })
 

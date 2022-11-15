@@ -7,6 +7,7 @@ class Player {
   gameUUID;
   uuid;
   activePokemonIndex;
+  action;
   constructor(PlayerName, team){
     this.name = PlayerName;
     this.uuid = v4();
