@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game</title>
-    <link rel="stylesheet" href="./../css/game.css">
+    <link rel="stylesheet" href="/public/css/game.css">
 </head>
 <body>
     <header>
@@ -45,8 +45,30 @@
                 <span class="pokemon__item"></span>
                 <p class="pokemon__name"></p>
             </div>
+
+            <div class="pokemon"></div>
+            <div class="pokemon"></div>
+            <div>
+                <button id="join">Valider</button>
+            </div>
         </section>
         <section class="opponentTeam team"></section>
     </main>
+    <script>
+        "use strict"
+        document.querySelector("#join").addEventListener("click", () => {
+            fetch("/join", {
+                // team et tt
+                method: "post"
+            })
+            .then(resp => resp.json())
+            .then(resp => {
+                sessionStorage.setItem("playerUUID", resp.playerUUID)
+                sessionStorage.setItem("gameUUID", resp.gameUUID)
+                window.location.replace("/duel")
+            })
+            
+        })
+    </script>
 </body>
 </html>

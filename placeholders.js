@@ -10,13 +10,14 @@ module.exports = {
         [
             new Pokemon(
                 "garchomp",
+                ["dragon", "ground"],
                 {
-                    hp: 108,
-                    atk: 130,
-                    def: 95,
-                    speAtk: 80,
-                    speDef: 85,
-                    speed: 102
+                    hp: { base: 108, current: 108},
+                    atk: { base: 130, modifier: 0},
+                    def: { base: 95, modifier: 0},
+                    speAtk: { base: 80, modifier: 0},
+                    speDef: { base: 85, modifier: 0},
+                    speed: { base: 102, modifier: 0}
                 },
                 [
                     new Move(
@@ -79,21 +80,21 @@ module.exports = {
                     "Held: When the holder is hit by a contact move, the attacking Pokémon takes 1/6 its max HP in damage."
                 )
             )
-        ],
-        "un socketid"
+        ]
     ),
     p2: new Player(
         "p2name",
         [
             new Pokemon(
                 "gliscor",
+                ["ground", "flying"],
                 {
-                    hp: 75,
-                    atk: 95,
-                    def: 125,
-                    speAtk: 45,
-                    speDef: 75,
-                    speed: 95
+                    hp: { base: 75, current: 75},
+                    atk: { base: 95, modifier: 0},
+                    def: { base: 125, modifier: 0},
+                    speAtk: { base: 45, modifier: 0},
+                    speDef: { base: 75, modifier: 0},
+                    speed: { base: 95, modifier: 0}
                 },
                 [
                     new Move(
@@ -156,7 +157,6 @@ module.exports = {
                     "Held: Inflicts Toxic on the holder at the end of the turn. Activates after Poison damage would occur."
                 )
             )
-        ],
-        "un socketid"
+        ]
     ),
 }

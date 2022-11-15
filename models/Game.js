@@ -1,9 +1,16 @@
-const Player = require('./Player').Player
+const { v4 } = require('uuid')
 
 module.exports = 
 class Game {
-  constructor(firstPlayer){
+  uuid;
+  players;
+  hasStarted;
+  readyPlayerCount;
+  constructor(){
+    this.uuid = v4();
     this.players = []
+    this.hasStarted = false;
+    this.readyPlayerCount = 0;
   }
 
   addPlayer(player){
@@ -14,7 +21,11 @@ class Game {
     return this.players.find(player => player.name == name)
   }
 
-  getPlayerBySocketId(socketId){
-    return this.players.find(player => player.name == socketId)
+  getPlayerByUUID(uuid){
+    return this.players.find(player => player.uuid == uuid)
+  }
+
+  getOpponentByPlayerUUID(uuid){
+    return this.players.find(player => player.uuid !== uuid)
   }
 }
