@@ -85,12 +85,20 @@ class Game {
             this.executeInstruction(this.players[1])
             this.executeInstruction(this.players[0])
           } else { // same move priority
-            if(getRandomInt(2) === 0) {
+            if(this.players[0].team[this.players[0].activePokemonIndex].stats.speed > this.players[1].team[this.players[1].activePokemonIndex].stats.speed) {
               this.executeInstruction(this.players[0])
               this.executeInstruction(this.players[1])
-            } else {
+            } else if(this.players[0].team[this.players[0].activePokemonIndex].stats.speed < this.players[1].team[this.players[1].activePokemonIndex].stats.speed) {
               this.executeInstruction(this.players[1])
               this.executeInstruction(this.players[0])
+            } else { // speed tie
+              if(getRandomInt(2) === 0) {
+                this.executeInstruction(this.players[0])
+                this.executeInstruction(this.players[1])
+              } else {
+                this.executeInstruction(this.players[1])
+                this.executeInstruction(this.players[0])
+              }
             }
           }
         }
@@ -105,6 +113,7 @@ class Game {
   }
 
   executeInstruction(player) {
+    console.log(`${player.name} action`)
     let playerActionData = {};
     console.log(player.name)
     switch(player.action.type) {
@@ -117,10 +126,51 @@ class Game {
       case 'MOVE':
         playerActionData.type = 'MOVE';
         playerActionData.playerUUID = player.uuid;
+        console.log(player.action.moveName)
+        this.useMove(player.team[player.activePokemonIndex], player.action.moveName, this.getOpponentByPlayerUUID(player.uuid).team[this.getOpponentByPlayerUUID(player.uuid).activePokemonIndex])
         // 
         // update client team too
         break;
     }
     this.roundDatas.push(playerActionData)
+  }
+
+  useMove(sender, moveName, receiver) { // receiver
+    console.log(sender)
+    console.log(sender.getMoveByName(moveName))
+    let move = sender.getMoveByName(moveName)
+    if(move.damageClass === 'status') {
+
+    } else { // damage atk
+      let level = 50;
+      let power = move.power;
+      let a;
+      let d;
+      if(move.damageClass === 'physical') {
+        a = sender.getRealStat(sender.stats.atk);
+        d = receiver.getRealStat(sender.stats.def);
+      } else {
+        a = sender.getRealStat(sender.stats.speAtk);
+        d = receiver.getRealStat(sender.stats.speDef);
+      }
+      console.log(a)
+      let target = 1; // 1V1 mode only
+      let weather = 1; // not implemented
+      let badge = 1; // no need
+      let critical = 1; // not implemented
+      let random = 1 - getRandomInt(16) / 100;
+      let stab;
+      if(sender.getTypeByName(move.type)) stab = 1.5;
+      else stab = 1;
+      let typeEffectiveness = 1; // todo
+      let burn = 1; // not implemented
+      let other = 1; // not implemented and todo (inchallah)
+
+      let damages = ( ( ( ( ( ( 2 * level ) / 5 ) + 2 ) * power * ( a / d ) ) / 50 ) + 2 ) * target * weather * badge * critical * random * stab * typeEffectiveness * burn * other
+      console.log(`${sender.name} send `)
+      console.log(damages)
+      console.log(`to ${receiver.name}`)
+    }
+
   }
 }

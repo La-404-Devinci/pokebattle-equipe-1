@@ -122,7 +122,7 @@ io.on('connection', (socket) => {
     let player = game.getPlayerByUUID(message.playerUUID)
     if(!player) return
     if(player.action) return
-    player.action = new Action(message.type, message.instruction, message.pokemonToSwitchName)
+    player.action = new Action(message.type, message.moveName, message.pokemonToSwitchName)
     console.log("player action")
     if(!(game.players[0].action && game.players[1].action)) return
     console.log("proceed turn")
