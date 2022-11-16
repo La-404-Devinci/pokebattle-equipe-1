@@ -38,6 +38,13 @@ body {
     display: grid;
     grid-template-rows: 1fr 1fr 1fr;
     grid-template-columns: 1fr 1fr;
+
+    .team__pokemon {
+
+      &.team__pokemon--selected {
+        border: solid 1px red;
+      }
+    }
   }
 }
 

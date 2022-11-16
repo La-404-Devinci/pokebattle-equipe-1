@@ -8,6 +8,7 @@ const { Server } = require("socket.io");
 const Player = require('./models/Player');
 const Game = require('./models/Game');
 const Pokemon = require('./models/Pokemon');
+const Action = require('./models/Action');
 
 const p1 = require('./placeholders').p1;
 const p2 = require('./placeholders').p2;
@@ -118,11 +119,12 @@ io.on('connection', (socket) => {
   })
   
   socket.on('ROUND_INSTRUCTION', (message) => {
-    if(!game.getPlayerByUUID(message.playerUUID)) return
-    if(game.getPlayerByUUID(message.playerUUID).action) return
-    game.getPlayerByUUID(message.playerUUID).action = message
+    let player = game.getPlayerByUUID(message.playerUUID)
+    if(!player) return
+    if(player.action) return
+    player.action = new Action(message.type, message.instruction)
     console.log("player action")
-    if(!(game.players[0].action && game.players[0].action)) return
+    if(!(game.players[0].action && game.players[1].action)) return
     console.log("proceed turn")
     game.proceedTurn()
   })

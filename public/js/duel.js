@@ -73,7 +73,7 @@ socket.on('DUEL_START', (msg) => {
         playerUUID: sessionStorage.getItem("playerUUID"),
         gameUUID: sessionStorage.getItem("gameUUID"),
         type: 'MOVE',
-        action: move.name,
+        instruction: move.name,
       })
     })
     movesContainer.appendChild(moveElement)
