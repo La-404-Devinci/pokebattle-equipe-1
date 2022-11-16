@@ -4,8 +4,10 @@ class Action {
   move;
   priority;
   moveName;
-  constructor(type, moveName){
+  pokemonToSwitchName;
+  constructor(type, moveName, pokemonToSwitchName){
     this.type = type;
     this.moveName = moveName;
+    this.pokemonToSwitchName = pokemonToSwitchName;
   }
 }

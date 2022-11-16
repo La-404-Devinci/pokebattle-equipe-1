@@ -19,4 +19,12 @@ class Player {
   {
     this.team = [...team]
   }
+
+  getPokemonByName(pokemonName) {
+    return this.team.find(pokemon => pokemon.name === pokemonName)
+  }
+
+  switch(pokemonName) {
+    this.activePokemonIndex = this.team.indexOf(this.getPokemonByName(pokemonName))
+  }
 }

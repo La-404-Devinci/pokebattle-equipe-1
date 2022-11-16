@@ -7,11 +7,13 @@ class Game {
   players;
   hasStarted;
   readyPlayerCount;
+  roundDatas;
   constructor(){
     this.uuid = v4();
     this.players = []
     this.hasStarted = false;
     this.readyPlayerCount = 0;
+    this.roundDatas = [];
   }
 
   addPlayer(player){
@@ -103,6 +105,22 @@ class Game {
   }
 
   executeInstruction(player) {
+    let playerActionData = {};
     console.log(player.name)
+    switch(player.action.type) {
+      case 'SWITCH':
+        player.switch(player.action.pokemonToSwitchName)
+        playerActionData.type = 'SWITCH';
+        playerActionData.switchedPokemonIndex = player.activePokemonIndex;
+        playerActionData.playerUUID = player.uuid;
+        break;
+      case 'MOVE':
+        playerActionData.type = 'MOVE';
+        playerActionData.playerUUID = player.uuid;
+        // 
+        // update client team too
+        break;
+    }
+    this.roundDatas.push(playerActionData)
   }
 }

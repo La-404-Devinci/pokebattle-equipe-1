@@ -28,7 +28,7 @@ switchBox__ValideBtn.addEventListener("click", () => {
     playerUUID: sessionStorage.getItem("playerUUID"),
     gameUUID: sessionStorage.getItem("gameUUID"),
     type: 'SWITCH',
-    target: selectedSwitchPokemon,
+    pokemonToSwitchName: selectedSwitchPokemon,
   })
 })
 
@@ -96,3 +96,54 @@ socket.on('DUEL_START', (msg) => {
     switchBox__team.appendChild(pokemonContainer)
   })
 });
+
+socket.on('ROUND_DATA', (msg) => {
+  console.log(msg)
+  let playerUpdateData = msg.find(data => data.playerUUID === sessionStorage.getItem("playerUUID"))
+  let opponentUpdateData = msg.find(data => data.playerUUID !== sessionStorage.getItem("gameUUID"))
+
+  switch(playerUpdateData.type) {
+    case 'SWITCH':
+      // update DOM todo: faire des fonctions
+      player.activePokemonIndex = playerUpdateData.switchedPokemonIndex;
+    
+      document.querySelector(".player .pokemon__name").textContent = player.team[player.activePokemonIndex].name
+      while(movesContainer.firstElementChild) movesContainer.firstElementChild.remove()
+      player.team[player.activePokemonIndex].moves.forEach(move => {
+        let moveElement = document.createElement("div")
+        moveElement.classList.add("moves__move")
+        moveElement.textContent = move.name
+        moveElement.addEventListener("click", () => {
+          console.log("send ?")
+          socket.emit('ROUND_INSTRUCTION', {
+            playerUUID: sessionStorage.getItem("playerUUID"),
+            gameUUID: sessionStorage.getItem("gameUUID"),
+            type: 'MOVE',
+            instruction: move.name,
+          })
+        })
+        movesContainer.appendChild(moveElement)
+      });
+      break;
+    case 'MOVE':
+      // todo
+      break;
+  }
+
+  switch(opponentUpdateData.type) {
+    case 'SWITCH':
+      console.log(opponentUpdateData.switchedPokemonIndex)
+      console.log(opponentUpdateData.switchedPokemonIndex)
+      // update DOM todo: faire des fonctions
+      opponent.activePokemonIndex = opponentUpdateData.switchedPokemonIndex;
+      console.log(opponent)
+    
+      document.querySelector(".opponent .pokemon__name").textContent = opponent.team[opponent.activePokemonIndex].name
+      break;
+    case 'MOVE':
+      // todo
+      break;
+  }
+
+
+})
