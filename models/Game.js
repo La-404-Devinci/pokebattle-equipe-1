@@ -104,6 +104,8 @@ class Game {
         }
       }
     }
+    this.players[0].action = null;
+    this.players[1].action = null;
   }
 
   setActionsMove() {
@@ -126,6 +128,7 @@ class Game {
       case 'MOVE':
         playerActionData.type = 'MOVE';
         playerActionData.playerUUID = player.uuid;
+        playerActionData.team = player.team;
         console.log(player.action.moveName)
         this.useMove(player.team[player.activePokemonIndex], player.action.moveName, this.getOpponentByPlayerUUID(player.uuid).team[this.getOpponentByPlayerUUID(player.uuid).activePokemonIndex])
         // 
@@ -170,6 +173,7 @@ class Game {
       console.log(`${sender.name} send `)
       console.log(damages)
       console.log(`to ${receiver.name}`)
+      receiver.stats.hp.current -= damages
     }
 
   }

@@ -63,6 +63,9 @@ socket.on('DUEL_START', (msg) => {
   document.querySelector(".player .pokemon__name").textContent = player.team[player.activePokemonIndex].name;
   document.querySelector(".opponent .pokemon__name").textContent = opponent.team[opponent.activePokemonIndex].name;
 
+  document.querySelector(".player .pokemon__hp").textContent = player.team[player.activePokemonIndex].stats.hp.current;
+  document.querySelector(".opponent .pokemon__hp").textContent = opponent.team[opponent.activePokemonIndex].stats.hp.current;
+
   player.team[player.activePokemonIndex].moves.forEach(move => {
     let moveElement = document.createElement("div")
     moveElement.classList.add("moves__move")
@@ -100,9 +103,18 @@ socket.on('DUEL_START', (msg) => {
 socket.on('ROUND_DATA', (msg) => {
   console.log(msg)
   let playerUpdateData = msg.find(data => data.playerUUID === sessionStorage.getItem("playerUUID"))
-  let opponentUpdateData = msg.find(data => data.playerUUID !== sessionStorage.getItem("gameUUID"))
+  let opponentUpdateData = msg.find(data => data.playerUUID !== sessionStorage.getItem("playerUUID"))
+
+  player.team = playerUpdateData.team;
+  opponent.team = opponentUpdateData.team;
+
+  // updatePlayerDom()
+  document.querySelector(".player .pokemon__hp").textContent = player.team[player.activePokemonIndex].stats.hp.current;
+  document.querySelector(".opponent .pokemon__hp").textContent = opponent.team[opponent.activePokemonIndex].stats.hp.current;
+
 
   switch(playerUpdateData.type) {
+
     case 'SWITCH':
       // update DOM todo: faire des fonctions
       player.activePokemonIndex = playerUpdateData.switchedPokemonIndex;
