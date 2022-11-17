@@ -8,6 +8,109 @@ class Game {
   hasStarted;
   readyPlayerCount;
   roundDatas;
+
+  table = {
+    normal: {
+        rock: 0.5,
+        spectre: 0,
+        acier: 0.5
+    },
+    fire: {
+        feu: 0.5,
+        water: 0.5,
+        plante: 2,
+        ice: 2,
+        bug:2,
+        rock: 0.5,
+        dragon: 0.5,
+        acier: 2
+    },
+    water: {
+        fire: 2,
+        water: 0.5,
+        plante: 0.5,
+        ground: 2,
+        rock: 2,
+        dragon: 0.5
+    },
+    plante: {
+        fire: 0.5,
+        water: 2,
+        plante: 0.5,
+        poison: 0.5,
+        ground: 2,
+        vol: 0.5,
+        bug: 0.5,
+        rock: 2,
+        dragon: 0.5,
+        acier: 0.5
+    },
+    electrik: {
+        water: 2,
+        plante: 0.5,
+        electrik: 0.5,
+        ground: 0,
+        vol: 2,
+        dragon: 0.5
+    },
+    ice: {
+        fire: 0.5,
+        water: 0.5,
+        plante: 2,
+        ice: 0.5,
+        ground: 2,
+        vol: 2,
+        dragon: 2
+    },
+    fight: {
+        normal: 2,
+        ice: 2,
+        poison: 0.5,
+        vol: 0.5,
+        psy: 0.5,
+        bug: 0.5,
+        rock: 2,
+        spectre: 0,
+        tenebre: 2,
+        acier: 2,
+        fairy: 0.5
+    },
+    poison: {
+        plante: 2,
+        poison: 0.5,
+        ground: 0.5,
+        rock: 0.5,
+        spectre: 0.5,
+        acier: 0,
+        fairy: 2
+    },
+    ground: {
+        fire: 2,
+        plante: 0.5,
+        electrik: 2,
+        poison: 2,
+        vol: 0,
+        bug: 0.5,
+        rock: 2,
+        acier: 2
+    },
+    vol: {
+        plante: 2,
+        electrik: 0.5,
+        fight: 2,
+        bug: 2,
+        rock: 0.5,
+        acier: 0.5
+    },
+    psy: {
+        fight: 2,
+        poison: 2,
+        psy: 0.5,
+        tenebre: 0,
+        acier: 0.5
+    }
+}
+
   constructor(){
     this.uuid = v4();
     this.players = []
@@ -139,6 +242,7 @@ class Game {
   }
 
   useMove(sender, moveName, receiver) { // receiver
+    if(sender.stats.hp.current <=0) return // pokemon dead
     console.log(sender)
     console.log(sender.getMoveByName(moveName))
     let move = sender.getMoveByName(moveName)
@@ -175,6 +279,14 @@ class Game {
       console.log(`to ${receiver.name}`)
       receiver.stats.hp.current -= damages
     }
+  }
 
+  getTypeEffectivness(atkTypeName, receiverTypeNames) {
+    let multiplier = 1;
+    receiverTypeNames.forEach(typeName => {
+        if(this.table[atkTypeName][typeName]) multiplier *= this.table[atkTypeName][typeName]
+    });
+    console.log("multiplier", multiplier)
+    return multiplier
   }
 }
