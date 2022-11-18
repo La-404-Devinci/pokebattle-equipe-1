@@ -70,6 +70,7 @@ app.get('/', (req, res) => {
 
 .post('/join', (req, res) => {
   console.log("/join")
+  if(!game) console.log("Creating new game")
   if(!game) game = new Game()
   if(game.players.length >= 2) {
     // res.header.
@@ -119,6 +120,7 @@ io.on('connection', (socket) => {
   })
   
   socket.on('ROUND_INSTRUCTION', (message) => {
+    if(game.deathSwitchWaitList.length > 0) return // waiting for switch after death
     let player = game.getPlayerByUUID(message.playerUUID)
     if(!player) return
     if(player.action) return
@@ -129,6 +131,13 @@ io.on('connection', (socket) => {
     game.proceedTurn()
     io.emit('ROUND_DATA', game.roundDatas)
   })
+
+  socket.on("disconnect", (reason) => {
+    if(io.engine.clientsCount === 0) {
+      game = null;
+      console.log("No player remaining, game destroy")
+    }
+  });
 })
 
 // app.listen(PORT,() => {

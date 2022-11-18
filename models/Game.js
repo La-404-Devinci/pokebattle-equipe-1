@@ -8,107 +8,165 @@ class Game {
   hasStarted;
   readyPlayerCount;
   roundDatas;
-
+  deathSwitchWaitList = []; // represente list of user who need to send new pokemon bcause dead
   table = {
     normal: {
-        rock: 0.5,
-        spectre: 0,
-        acier: 0.5
+      rock: 0.5,
+      ghost: 0,
+      steel: 0.5
     },
     fire: {
-        feu: 0.5,
-        water: 0.5,
-        plante: 2,
-        ice: 2,
-        bug:2,
-        rock: 0.5,
-        dragon: 0.5,
-        acier: 2
+      feu: 0.5,
+      water: 0.5,
+      grass: 2,
+      ice: 2,
+      bug:2,
+      rock: 0.5,
+      dragon: 0.5,
+      steel: 2
     },
     water: {
-        fire: 2,
-        water: 0.5,
-        plante: 0.5,
-        ground: 2,
-        rock: 2,
-        dragon: 0.5
+      fire: 2,
+      water: 0.5,
+      grass: 0.5,
+      ground: 2,
+      rock: 2,
+      dragon: 0.5
     },
-    plante: {
-        fire: 0.5,
-        water: 2,
-        plante: 0.5,
-        poison: 0.5,
-        ground: 2,
-        vol: 0.5,
-        bug: 0.5,
-        rock: 2,
-        dragon: 0.5,
-        acier: 0.5
+    grass: {
+      fire: 0.5,
+      water: 2,
+      grass: 0.5,
+      poison: 0.5,
+      ground: 2,
+      flying: 0.5,
+      bug: 0.5,
+      rock: 2,
+      dragon: 0.5,
+      steel: 0.5
     },
-    electrik: {
-        water: 2,
-        plante: 0.5,
-        electrik: 0.5,
-        ground: 0,
-        vol: 2,
-        dragon: 0.5
+    electric: {
+      water: 2,
+      grass: 0.5,
+      electric: 0.5,
+      ground: 0,
+      flying: 2,
+      dragon: 0.5
     },
     ice: {
-        fire: 0.5,
-        water: 0.5,
-        plante: 2,
-        ice: 0.5,
-        ground: 2,
-        vol: 2,
-        dragon: 2
+      fire: 0.5,
+      water: 0.5,
+      grass: 2,
+      ice: 0.5,
+      ground: 2,
+      flying: 2,
+      dragon: 2
     },
-    fight: {
-        normal: 2,
-        ice: 2,
-        poison: 0.5,
-        vol: 0.5,
-        psy: 0.5,
-        bug: 0.5,
-        rock: 2,
-        spectre: 0,
-        tenebre: 2,
-        acier: 2,
-        fairy: 0.5
+    fighting: {
+      normal: 2,
+      ice: 2,
+      poison: 0.5,
+      flying: 0.5,
+      psychic: 0.5,
+      bug: 0.5,
+      rock: 2,
+      ghost: 0,
+      dark: 2,
+      steel: 2,
+      fairy: 0.5
     },
     poison: {
-        plante: 2,
-        poison: 0.5,
-        ground: 0.5,
-        rock: 0.5,
-        spectre: 0.5,
-        acier: 0,
-        fairy: 2
+      grass: 2,
+      poison: 0.5,
+      ground: 0.5,
+      rock: 0.5,
+      ghost: 0.5,
+      steel: 0,
+      fairy: 2
     },
     ground: {
-        fire: 2,
-        plante: 0.5,
-        electrik: 2,
-        poison: 2,
-        vol: 0,
-        bug: 0.5,
-        rock: 2,
-        acier: 2
+      fire: 2,
+      grass: 0.5,
+      electric: 2,
+      poison: 2,
+      flying: 0,
+      bug: 0.5,
+      rock: 2,
+      steel: 2
     },
-    vol: {
-        plante: 2,
-        electrik: 0.5,
-        fight: 2,
-        bug: 2,
-        rock: 0.5,
-        acier: 0.5
+    flying: {
+      grass: 2,
+      electric: 0.5,
+      fighting: 2,
+      bug: 2,
+      rock: 0.5,
+      steel: 0.5
     },
-    psy: {
-        fight: 2,
-        poison: 2,
-        psy: 0.5,
-        tenebre: 0,
-        acier: 0.5
-    }
+    psychic: {
+      fighting: 2,
+      poison: 2,
+      psychic: 0.5,
+      dark: 0,
+      steel: 0.5
+    },
+    bug: {
+      fire: 0.5,
+      grass: 2,
+      fighting: 0.5,
+      poison: 0.5,
+      flying: 0.5,
+      psychic: 2,
+      ghost: 0.5,
+      dark: 2,
+      steel: 0.5,
+      fairy: 0.5
+    },
+    rock: {
+      fire: 2,
+      ice: 2,
+      fighting: 0.5,
+      ground: 0.5,
+      flying: 2,
+      bug: 2,
+      steel: 0.5
+    },
+    ghost: {
+      normal: 0,
+      psychic: 2,
+      ghost: 2,
+      dark: 0.5
+    },
+    dragon: {
+      dragon: 2,
+      steel: 0.5,
+      fairy: 0
+    },
+    dark: {
+      fighting: 0.5,
+      psychic: 2,
+      ghost: 2,
+      dark: 0.5,
+      fairy: 0.5
+    },
+    steel: {
+      fire: 0.5,
+      water: 0.5,
+      electric: 0.5,
+      ice: 2,
+      rock: 2,
+      steel: 0.5,
+      fairy: 2
+    },
+    fairy: {
+      fire: 0.5,
+      fighting: 2,
+      poison: 0.5,
+      dragon: 2,
+      dark: 2,
+      steel: 0.5
+    },
+    unknown: {},
+    shadow: {}
 }
 
   constructor(){
@@ -129,6 +187,10 @@ class Game {
 
   getPlayerByUUID(uuid){
     return this.players.find(player => player.uuid == uuid)
+  }
+
+  getPlayerByPokemon(pokemon) {
+    return this.players.find(player => player.team.find(pokemonT => pokemonT === pokemon))
   }
 
   getOpponentByPlayerUUID(uuid){
@@ -242,10 +304,9 @@ class Game {
   }
 
   useMove(sender, moveName, receiver) { // receiver
-    if(sender.stats.hp.current <=0) return // pokemon dead
-    console.log(sender)
-    console.log(sender.getMoveByName(moveName))
+    if(sender.stats.hp.current <= 0) return // pokemon dead
     let move = sender.getMoveByName(moveName)
+    // todo test préci
     if(move.damageClass === 'status') {
 
     } else { // damage atk
@@ -260,7 +321,6 @@ class Game {
         a = sender.getRealStat(sender.stats.speAtk);
         d = receiver.getRealStat(sender.stats.speDef);
       }
-      console.log(a)
       let target = 1; // 1V1 mode only
       let weather = 1; // not implemented
       let badge = 1; // no need
@@ -269,24 +329,28 @@ class Game {
       let stab;
       if(sender.getTypeByName(move.type)) stab = 1.5;
       else stab = 1;
-      let typeEffectiveness = 1; // todo
+      let typeEffectiveness = this.getTypeEffectivness(move.type, receiver.types);
       let burn = 1; // not implemented
-      let other = 1; // not implemented and todo (inchallah)
+      let other = 1; // not implemented and todo - les objets (inchallah)
 
       let damages = ( ( ( ( ( ( 2 * level ) / 5 ) + 2 ) * power * ( a / d ) ) / 50 ) + 2 ) * target * weather * badge * critical * random * stab * typeEffectiveness * burn * other
+      damages = Math.round(damages)
       console.log(`${sender.name} send `)
       console.log(damages)
       console.log(`to ${receiver.name}`)
       receiver.stats.hp.current -= damages
+      if(receiver.stats.hp.current <= 0) {
+        this.deathSwitchWaitList.push(this.getPlayerByPokemon(receiver))
+        console.log("deathSwitchWaitList", this.deathSwitchWaitList)
+      }
     }
   }
 
   getTypeEffectivness(atkTypeName, receiverTypeNames) {
     let multiplier = 1;
     receiverTypeNames.forEach(typeName => {
-        if(this.table[atkTypeName][typeName]) multiplier *= this.table[atkTypeName][typeName]
+      if(typeof this.table[atkTypeName][typeName] === "number") multiplier *= this.table[atkTypeName][typeName];
     });
-    console.log("multiplier", multiplier)
     return multiplier
   }
 }

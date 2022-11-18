@@ -21,7 +21,7 @@ class Pokemon {
   }
 
   getTypeByName(typeName) {
-    return this.types.find(type => type.name === typeName)
+    return this.types.find(type => type === typeName)
   }
 
   getRealStat(stat) {
