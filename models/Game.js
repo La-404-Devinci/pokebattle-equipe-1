@@ -8,7 +8,7 @@ class Game {
   hasStarted;
   readyPlayerCount;
   roundDatas;
-  deathSwitchWaitList = []; // represente list of user who need to send new pokemon bcause dead
+  deathSwitchWaitList = {}; // represente list of user who need to send new pokemon bcause dead
   table = {
     normal: {
       rock: 0.5,
@@ -175,6 +175,10 @@ class Game {
     this.hasStarted = false;
     this.readyPlayerCount = 0;
     this.roundDatas = [];
+    this.deathSwitchWaitList = {
+      isActive: false,
+      deathSwitchWaitList: []
+    }
   }
 
   addPlayer(player){
@@ -339,8 +343,10 @@ class Game {
       console.log(damages)
       console.log(`to ${receiver.name}`)
       receiver.stats.hp.current -= damages
+      console.log(receiver.stats.hp.current)
       if(receiver.stats.hp.current <= 0) {
-        this.deathSwitchWaitList.push(this.getPlayerByPokemon(receiver))
+        this.deathSwitchWaitList.isActive = false
+        this.deathSwitchWaitList.deathSwitchWaitList.push(this.getPlayerByPokemon(receiver))
         console.log("deathSwitchWaitList", this.deathSwitchWaitList)
       }
     }

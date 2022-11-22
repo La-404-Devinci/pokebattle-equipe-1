@@ -120,7 +120,9 @@ io.on('connection', (socket) => {
   })
   
   socket.on('ROUND_INSTRUCTION', (message) => {
-    if(game.deathSwitchWaitList.length > 0) return // waiting for switch after death
+    if(game.deathSwitchWaitList.deathSwitchWaitList.length > 0 && game.deathSwitchWaitList.isActive) {
+      console.log("// waiting for switch after death")
+    } // waiting for switch after death
     let player = game.getPlayerByUUID(message.playerUUID)
     if(!player) return
     if(player.action) return
@@ -130,7 +132,19 @@ io.on('connection', (socket) => {
     console.log("proceed turn")
     game.proceedTurn()
     io.emit('ROUND_DATA', game.roundDatas)
+    game.roundDatas = []
+    // io.emit()
+    game.deathSwitchWaitList.isActive = true
+    if(game.deathSwitchWaitList.deathSwitchWaitList.length > 0) {
+      io.emit('DEATH_SWITCH', {
+        playerRequestedToSwitch: game.deathSwitchWaitList.deathSwitchWaitList
+      })
+    }
   })
+
+  socket.on('DEATH_SWITCH', (reason) => {
+    console.log('DEATH_SWITCH')
+  });
 
   socket.on("disconnect", (reason) => {
     if(io.engine.clientsCount === 0) {

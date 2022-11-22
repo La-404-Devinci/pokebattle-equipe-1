@@ -13,6 +13,11 @@ let switchBox__team = document.querySelector(".switchBox__team")
 let switchBox__ValideBtn = document.querySelector(".switchBox__btn")
 let switchBox__close = document.querySelector(".switchBox__close")
 
+let selectedDeathSwitchPokemon;
+let deathSwitchBox = document.querySelector(".deathSwitchBox")
+let deathSwitchBox__team = document.querySelector(".deathSwitchBox__team")
+let deathSwitchBox__ValideBtn = document.querySelector(".deathSwitchBox__btn")
+
 switchBtn.addEventListener("click", () => {
   switchBox.style.display = "block"
 })
@@ -101,16 +106,12 @@ socket.on('DUEL_START', (msg) => {
 });
 
 socket.on('ROUND_DATA', (msg) => {
-  console.log(msg)
+  console.log('ROUND_DATA', msg)
   let playerUpdateData = msg.find(data => data.playerUUID === sessionStorage.getItem("playerUUID"))
   let opponentUpdateData = msg.find(data => data.playerUUID !== sessionStorage.getItem("playerUUID"))
 
-  player.team = playerUpdateData.team;
-  opponent.team = opponentUpdateData.team;
 
-  // updatePlayerDom()
-  document.querySelector(".player .pokemon__hp").textContent = player.team[player.activePokemonIndex].stats.hp.current;
-  document.querySelector(".opponent .pokemon__hp").textContent = opponent.team[opponent.activePokemonIndex].stats.hp.current;
+  
 
 
   switch(playerUpdateData.type) {
@@ -142,6 +143,7 @@ socket.on('ROUND_DATA', (msg) => {
       break;
   }
 
+  console.log('ROUND_DATA_poponet', opponentUpdateData.type)
   switch(opponentUpdateData.type) {
     case 'SWITCH':
       console.log(opponentUpdateData.switchedPokemonIndex)
@@ -157,5 +159,22 @@ socket.on('ROUND_DATA', (msg) => {
       break;
   }
 
+  // updatePlayerDom()
+  document.querySelector(".player .pokemon__hp").textContent = player.team[player.activePokemonIndex].stats.hp.current;
+  document.querySelector(".opponent .pokemon__hp").textContent = opponent.team[opponent.activePokemonIndex].stats.hp.current;
+})
 
+socket.on('DEATH_SWITCH', (msg) => {
+  if(msg.playerRequestedToSwitch.find(player => player.playerUUID === player.playerUUID)) deathSwitchBox.style.display = "block";
+})
+
+switchBox__ValideBtn.addEventListener("click", () => {
+  if(!selectedSwitchPokemon) return
+  console.log("switch")
+  socket.emit('ROUND_INSTRUCTION', {
+    playerUUID: sessionStorage.getItem("playerUUID"),
+    gameUUID: sessionStorage.getItem("gameUUID"),
+    type: 'SWITCH',
+    pokemonToSwitchName: selectedSwitchPokemon,
+  })
 })
