@@ -13,11 +13,11 @@
     </header>
     <main>
         <section class="playerTeam team">
-            <!-- <template>
+            <template id="pokemon__template">
                 <div class="pokemon">
 
                 </div>
-            </template> -->
+            </template>
 
             <div class="pokemon">
                 tt
@@ -56,6 +56,29 @@
     </main>
     <script>
         "use strict"
+
+        let pokemonNames
+        if (!localStorage.getItem('pokemonsList')) {
+          fetch('https://pokeapi.co/api/v2/pokemon?limit=2000')
+            .then(resp => resp.json())
+            .then(data => { 
+                localStorage.setItem('pokemonsList', JSON.stringify(data)) 
+                pokemonNames = data
+            })
+        }
+
+        let player = {
+            name: "default name",
+            team: [{}, {}, {}, {}, {}, {}]
+        }
+
+        player.team.forEach(pkm => {
+            let pkmElement = document.importNode(document.querySelector("#pokemon__template"), true)
+            document.querySelector(".playerTeam")
+
+        })
+
+
         document.querySelector("#join").addEventListener("click", () => {
             fetch("/join", {
                 // team et tt

@@ -77,8 +77,12 @@ app.get('/', (req, res) => {
     res.send("game full")
     return;
   }
-  let player = p1
-  if(game.players.length === 1) player = p2
+
+  console.log(req.body)
+  return
+  // placeholders 
+  // let player = p1
+  // if(game.players.length === 1) player = p2
   
   player.gameUUID = game.uuid;
   game.addPlayer(player)
@@ -96,32 +100,14 @@ app.get('/', (req, res) => {
 io.on('connection', (socket) => {
   console.log(io.engine.clientsCount)
   if(io.engine.clientsCount === 2 && !game.hasStarted) {
-    io.emit("GAME_START")
     game.hasStarted = true
+    io.emit("GAME_START", game)
   }
-
-  socket.on('GET_PLAYER', (message) => {
-    let player = game.getPlayerByUUID(message.playerUUID)
-    if(!player) return
-    socket.emit('PLAYER_DATA', player)
-  })
-
-  socket.on('GET_OPPONENT', (message) => {
-    let player = game.getPlayerByUUID(message.playerUUID)
-    if(!player) return
-    socket.emit('OPPONENT_DATA', game.getOpponentByPlayerUUID(message.playerUUID))
-  })
-
-  socket.on('READY', (message) => {
-    game.readyPlayerCount +=1
-    if(game.readyPlayerCount === 2) {
-      io.emit('DUEL_START')
-    }
-  })
   
   socket.on('ROUND_INSTRUCTION', (message) => {
     if(game.deathSwitchWaitList.deathSwitchWaitList.length > 0 && game.deathSwitchWaitList.isActive) {
       console.log("// waiting for switch after death")
+      return
     } // waiting for switch after death
     let player = game.getPlayerByUUID(message.playerUUID)
     if(!player) return
@@ -142,8 +128,12 @@ io.on('connection', (socket) => {
     }
   })
 
-  socket.on('DEATH_SWITCH', (reason) => {
+  socket.on('DEATH_SWITCH', (message) => {
     console.log('DEATH_SWITCH')
+    console.log(game.deathSwitchWaitList.deathSwitchWaitList.length)
+    game.getPlayerByUUID(message.playerUUID).switch(message.pokemonToSwitchName)
+    game.deathSwitchWaitList.deathSwitchWaitList.splice(game.deathSwitchWaitList.deathSwitchWaitList.indexOf(game.getPlayerByUUID(message.playerUUID)))
+    io.emit('DEATH_SWITCHED', game)
   });
 
   socket.on("disconnect", (reason) => {
@@ -153,10 +143,6 @@ io.on('connection', (socket) => {
     }
   });
 })
-
-// app.listen(PORT,() => {
-//   console.log(`Running on PORT ${PORT}`);
-// })
 
 server.listen(PORT, () => {
   console.log(`Socket.IO server running at http://localhost:${PORT}/`)
