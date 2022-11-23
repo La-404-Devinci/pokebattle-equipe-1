@@ -131,7 +131,7 @@ io.on('connection', (socket) => {
     if(!(game.players[0].action && game.players[1].action)) return
     console.log("proceed turn")
     game.proceedTurn()
-    io.emit('ROUND_DATA', game.roundDatas)
+    io.emit('ROUND_DATA', game)
     game.roundDatas = []
     // io.emit()
     game.deathSwitchWaitList.isActive = true

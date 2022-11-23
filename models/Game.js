@@ -186,11 +186,11 @@ class Game {
   }
 
   getPlayerByName(name){
-    return this.players.find(player => player.name == name)
+    return this.players.find(player => player.name === name)
   }
 
   getPlayerByUUID(uuid){
-    return this.players.find(player => player.uuid == uuid)
+    return this.players.find(player => player.uuid === uuid)
   }
 
   getPlayerByPokemon(pokemon) {

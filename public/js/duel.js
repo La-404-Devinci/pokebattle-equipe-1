@@ -1,5 +1,7 @@
 "use strict"
 
+import {updatePlayer, updateOpponent, updateBothPlayers, updateGame } from "./duelFuncts.js"
+
 let player;
 let opponent;
 const socket = io()
@@ -105,63 +107,65 @@ socket.on('DUEL_START', (msg) => {
   })
 });
 
-socket.on('ROUND_DATA', (msg) => {
-  console.log('ROUND_DATA', msg)
-  let playerUpdateData = msg.find(data => data.playerUUID === sessionStorage.getItem("playerUUID"))
-  let opponentUpdateData = msg.find(data => data.playerUUID !== sessionStorage.getItem("playerUUID"))
+socket.on('ROUND_DATA', (game) => {
+  console.log('ROUND_DATA', game)
+
+  updateGame(game)
+  // let playerUpdateData = msg.find(data => data.playerUUID === sessionStorage.getItem("playerUUID"))
+  // let opponentUpdateData = msg.find(data => data.playerUUID !== sessionStorage.getItem("playerUUID"))
 
 
   
 
 
-  switch(playerUpdateData.type) {
+  // switch(playerUpdateData.type) {
 
-    case 'SWITCH':
-      // update DOM todo: faire des fonctions
-      player.activePokemonIndex = playerUpdateData.switchedPokemonIndex;
+  //   case 'SWITCH':
+  //     // update DOM todo: faire des fonctions
+  //     player.activePokemonIndex = playerUpdateData.switchedPokemonIndex;
     
-      document.querySelector(".player .pokemon__name").textContent = player.team[player.activePokemonIndex].name
-      while(movesContainer.firstElementChild) movesContainer.firstElementChild.remove()
-      player.team[player.activePokemonIndex].moves.forEach(move => {
-        let moveElement = document.createElement("div")
-        moveElement.classList.add("moves__move")
-        moveElement.textContent = move.name
-        moveElement.addEventListener("click", () => {
-          console.log("send ?")
-          socket.emit('ROUND_INSTRUCTION', {
-            playerUUID: sessionStorage.getItem("playerUUID"),
-            gameUUID: sessionStorage.getItem("gameUUID"),
-            type: 'MOVE',
-            moveName: move.name,
-          })
-        })
-        movesContainer.appendChild(moveElement)
-      });
-      break;
-    case 'MOVE':
-      // todo
-      break;
-  }
+  //     document.querySelector(".player .pokemon__name").textContent = player.team[player.activePokemonIndex].name
+  //     while(movesContainer.firstElementChild) movesContainer.firstElementChild.remove()
+  //     player.team[player.activePokemonIndex].moves.forEach(move => {
+  //       let moveElement = document.createElement("div")
+  //       moveElement.classList.add("moves__move")
+  //       moveElement.textContent = move.name
+  //       moveElement.addEventListener("click", () => {
+  //         console.log("send ?")
+  //         socket.emit('ROUND_INSTRUCTION', {
+  //           playerUUID: sessionStorage.getItem("playerUUID"),
+  //           gameUUID: sessionStorage.getItem("gameUUID"),
+  //           type: 'MOVE',
+  //           moveName: move.name,
+  //         })
+  //       })
+  //       movesContainer.appendChild(moveElement)
+  //     });
+  //     break;
+  //   case 'MOVE':
+  //     // todo
+  //     break;
+  // }
 
-  console.log('ROUND_DATA_poponet', opponentUpdateData.type)
-  switch(opponentUpdateData.type) {
-    case 'SWITCH':
-      console.log(opponentUpdateData.switchedPokemonIndex)
-      console.log(opponentUpdateData.switchedPokemonIndex)
-      // update DOM todo: faire des fonctions
-      opponent.activePokemonIndex = opponentUpdateData.switchedPokemonIndex;
-      console.log(opponent)
+  // console.log('ROUND_DATA_opponet', opponentUpdateData.type)
+  // switch(opponentUpdateData.type) {
+  //   case 'SWITCH':
+  //     console.log(opponentUpdateData.switchedPokemonIndex)
+  //     console.log(opponentUpdateData.switchedPokemonIndex)
+  //     // update DOM todo: faire des fonctions
+  //     opponent.activePokemonIndex = opponentUpdateData.switchedPokemonIndex;
+  //     console.log(opponent)
     
-      document.querySelector(".opponent .pokemon__name").textContent = opponent.team[opponent.activePokemonIndex].name
-      break;
-    case 'MOVE':
-      // todo
-      break;
-  }
+  //     document.querySelector(".opponent .pokemon__name").textContent = opponent.team[opponent.activePokemonIndex].name
+  //     break;
+  //   case 'MOVE':
+  //     // todo
+  //     break;
+  // }
 
   // updatePlayerDom()
-  document.querySelector(".player .pokemon__hp").textContent = player.team[player.activePokemonIndex].stats.hp.current;
-  document.querySelector(".opponent .pokemon__hp").textContent = opponent.team[opponent.activePokemonIndex].stats.hp.current;
+  // document.querySelector(".player .pokemon__hp").textContent = player.team[player.activePokemonIndex].stats.hp.current;
+  // document.querySelector(".opponent .pokemon__hp").textContent = opponent.team[opponent.activePokemonIndex].stats.hp.current;
 })
 
 socket.on('DEATH_SWITCH', (msg) => {
