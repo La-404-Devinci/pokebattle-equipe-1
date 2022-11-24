@@ -13,17 +13,26 @@ main {
   height: 90vh;
   width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 0 4%;
 }
 main .team {
   border: solid 1px;
-  width: 40%;
+  width: 100%;
   height: 90%;
   display: grid;
   grid-template-rows: 1fr 1fr 1fr 1fr;
   grid-template-columns: 1fr 1fr;
+}
+main .team__pokemon--name {
+  width: 80%;
+}
+main .team__pokemon--move {
+  width: 45%;
+}
+main .team__pokemon--ability {
+  width: 100%;
 }
 
 /*# sourceMappingURL=game.css.map */

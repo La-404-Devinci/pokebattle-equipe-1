@@ -15,57 +15,52 @@
         <section class="playerTeam team">
             <template id="pokemon__template">
                 <div class="pokemon">
+                    <img src="" alt="" class="pokemon__sprite">
+                    <input list="pokemons" name="pokemons" class="team__pokemon--name">
 
+                    <input list="pokemonsAtks" name="pokemons" class="team__pokemon--move">
+                    <input list="pokemonsAtks" name="pokemons" class="team__pokemon--move">
+                    <input list="pokemonsAtks" name="pokemons" class="team__pokemon--move">
+                    <input list="pokemonsAtks" name="pokemons" class="team__pokemon--move">
+
+                    <input list="pokemonsAbilities" name="pokemons" class="team__pokemon--ability">
+
+                    <input list="pokemonsItems" name="pokemons" class="team__pokemon--item">
                 </div>
             </template>
 
-            <div class="pokemon">
-                tt
-                <img src="" alt="" class="pokemon__sprite">
-                <span class="pokemon__item"></span>
-                <p class="pokemon__name"></p>
-            </div>
+            <datalist id="pokemons"></datalist>
+            <datalist id="pokemonsAtks"></datalist>
+            <datalist id="pokemonsAbilities"></datalist>
+            <datalist id="pokemonsItems"></datalist>
 
-            <div class="pokemon">
-                aa
-                <img src="" alt="" class="pokemon__sprite">
-                <span class="pokemon__item"></span>
-                <p class="pokemon__name"></p>
-            </div>
-
-            <div class="pokemon">
-                tt
-                <img src="" alt="" class="pokemon__sprite">
-                <span class="pokemon__item"></span>
-                <p class="pokemon__name"></p>
-            </div>
-            
-            <div class="pokemon">
-                <img src="" alt="" class="pokemon__sprite">
-                <span class="pokemon__item"></span>
-                <p class="pokemon__name"></p>
-            </div>
-
-            <div class="pokemon"></div>
-            <div class="pokemon"></div>
-            <div>
+            <div class="playerTeam__join">
                 <button id="join">Valider</button>
             </div>
         </section>
-        <section class="opponentTeam team"></section>
     </main>
     <script>
         "use strict"
 
-        let pokemonNames
+        let dataListPokemons = document.querySelector("#pokemons")
+
+        function removeChildrens (element) {
+            while (element.lastElementChild) {
+                element.removeChild(element.lastElementChild)
+            }
+        }
+
+        let pokemon__template = document.querySelector("#pokemon__template")
+
+        let pokemonList;
         if (!localStorage.getItem('pokemonsList')) {
           fetch('https://pokeapi.co/api/v2/pokemon?limit=2000')
             .then(resp => resp.json())
             .then(data => { 
                 localStorage.setItem('pokemonsList', JSON.stringify(data)) 
-                pokemonNames = data
+                pokemonList = data
             })
-        }
+        } else pokemonList = JSON.parse(localStorage.getItem('pokemonsList')).results
 
         let player = {
             name: "default name",
@@ -73,8 +68,31 @@
         }
 
         player.team.forEach(pkm => {
-            let pkmElement = document.importNode(document.querySelector("#pokemon__template"), true)
-            document.querySelector(".playerTeam")
+            let pkmElement = pokemon__template.content.cloneNode(true)
+
+            pkmElement.querySelector(".team__pokemon--name").addEventListener("input", (e) => {
+                removeChildrens(dataListPokemons)
+                const pokemonFiltered = JSON.parse(localStorage.getItem('pokemonNames')).results.filter(pokemon => pokemon.name.includes(e.target.value))
+                pokemonFiltered.forEach(pokemon => {
+                const clone = document.createElement("option")
+                clone.value = pokemon.url
+                clone.textContent = pokemon.name
+                dataListPokemons.appendChild(clone)
+                })
+            })
+
+            pkmElement.querySelector(".team__pokemon--name").addEventListener("focusout", () => {
+                removeChildrens(dataListPokemons)
+            })
+
+            pkmElement.querySelectorAll(".team__pokemon--move").forEach(moveElement => {
+                moveElement.addEventListener("input", () => {
+                    console.log('input')
+                })
+            })
+            
+
+            document.querySelector(".playerTeam__join").before(pkmElement)
 
         })
 
