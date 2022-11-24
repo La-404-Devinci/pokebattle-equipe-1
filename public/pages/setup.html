@@ -30,7 +30,7 @@
             </template>
 
             <datalist id="pokemons"></datalist>
-            <datalist id="pokemonsAtks"></datalist>
+            <datalist id="pokemonMoves"></datalist>
             <datalist id="pokemonsAbilities"></datalist>
             <datalist id="pokemonsItems"></datalist>
 
@@ -43,6 +43,7 @@
         "use strict"
 
         let dataListPokemons = document.querySelector("#pokemons")
+        let dataListMoves = document.querySelector("#pokemonMoves")
 
         function removeChildrens (element) {
             while (element.lastElementChild) {
@@ -68,25 +69,54 @@
         }
 
         player.team.forEach(pkm => {
+            console.log(pkm)
             let pkmElement = pokemon__template.content.cloneNode(true)
 
             pkmElement.querySelector(".team__pokemon--name").addEventListener("input", (e) => {
                 removeChildrens(dataListPokemons)
-                const pokemonFiltered = JSON.parse(localStorage.getItem('pokemonNames')).results.filter(pokemon => pokemon.name.includes(e.target.value))
+                const pokemonFiltered = JSON.parse(localStorage.getItem('pokemonsList')).results.filter(pokemon => pokemon.name.includes(e.target.value))
+                if(pokemonFiltered.length === 1) pkm.url = pokemonFiltered[0].url
                 pokemonFiltered.forEach(pokemon => {
-                const clone = document.createElement("option")
-                clone.value = pokemon.url
-                clone.textContent = pokemon.name
-                dataListPokemons.appendChild(clone)
+                    const clone = document.createElement("option")
+                    clone.value = pokemon.name
+                    clone.textContent = pokemon.name
+                    dataListPokemons.appendChild(clone)
+                })
+                console.log(player)
+            })
+
+            pkmElement.querySelector(".team__pokemon--name").addEventListener("focus", (e) => {
+                removeChildrens(dataListPokemons)
+                const pokemonFiltered = JSON.parse(localStorage.getItem('pokemonsList')).results.filter(pokemon => pokemon.name.includes(e.target.value))
+                pokemonFiltered.forEach(pokemon => {
+                    const clone = document.createElement("option")
+                    clone.value = pokemon.name
+                    clone.textContent = pokemon.name
+                    dataListPokemons.appendChild(clone)
                 })
             })
 
-            pkmElement.querySelector(".team__pokemon--name").addEventListener("focusout", () => {
-                removeChildrens(dataListPokemons)
+            pkmElement.querySelector(".team__pokemon--name").addEventListener("focusout", (e) => {
+                console.log(player)
+                const pokemonFiltered = pokemonList.find(pokemon => pokemon.name === e.target.value)
+                console.log(pokemonFiltered)
+                if(!pokemonFiltered) return
+                console.log("pokemonFiltered")
+                pkm.name = pokemonFiltered.name;
+                pkm.url = pokemonFiltered.url;
+                console.log(pkm)
+                fetch(pkm.url)
+                .then(resp => resp.json())
+                .then(resp => {
+                    pkm.usableMoves = resp.moves;
+                    console.log(player)
+                })
             })
 
             pkmElement.querySelectorAll(".team__pokemon--move").forEach(moveElement => {
-                moveElement.addEventListener("input", () => {
+                moveElement.addEventListener("focus", () => {
+                    const singlePkm = JSON.parse(localStorage.getItem('pokemonsList')).results.find(pokemon => pokemon.name === pkm.name)
+                    if(singlePkm)
                     console.log('input')
                 })
             })
